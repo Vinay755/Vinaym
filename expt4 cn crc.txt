@@ -1,0 +1,54 @@
+#include<stdio.h>
+int message[100],b[100],j,length;
+int gp[17]={1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,1,0};
+
+void divide(int k)
+{
+    int i,j,count=0;
+    for(i=0;i<k;i++)
+    {
+        if(message[i]==gp[0])
+            for(j=i;j<17+i;j++)
+                message[j]=message[j]^gp[count++];
+        count=0;
+    }
+}
+
+int main(){
+    int i;
+    printf("Enter the length of data frame:");
+    scanf("%d",&length);
+    printf("\nEnter the message in bits:");
+    for(i=0;i<length;i++)
+        scanf("%d",&message[i]);
+
+    for(i=0;i<16;i++)
+        message[length++]=0;
+
+    for(i=0;i<length;i++)      //copy msg into b
+        b[i]=message[i];
+
+    divide(length-16);
+
+    for(i=0;i<length;i++)
+        b[i]=b[i]^message[i];
+
+    printf("Data to be transmitted:\n");
+    for (i=0;i<length;i++)
+        printf("%2d",b[i]);
+
+    printf("\n\nEnter the received data :\n");
+    for(i=0;i<length;i++)
+        scanf("%d",&message[i]);
+
+    divide(length-16);
+
+    for(i=0;i<length;i++)
+         if(message[i]!=0)
+         {
+            printf("\nERROR in received data \n");
+            return 0;
+         }
+    printf("\n NO ERROR in received Data\n");
+    return 0;
+}
