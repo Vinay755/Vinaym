@@ -1,0 +1,41 @@
+package com.company;
+
+import java.io.*;
+import java.net.*;
+import java.util.Scanner;
+
+public class MyClient {
+    public static void main(String[] args) {
+        try{
+            Scanner sc = new Scanner(System.in);
+            Socket s=new Socket("localhost",6666);
+            DataOutputStream dout=new DataOutputStream(s.getOutputStream());
+            System.out.println("Establishing Connection...");
+            System.out.println("Connection Established");
+            System.out.println("Enter the message to be sent:");
+            String str = sc.nextLine();
+            dout.writeUTF(str);
+            dout.flush();
+            dout.close();
+            System.out.println("Connection Closed");
+            s.close();
+        }catch(Exception e){System.out.println(e);}
+    }
+}
+package com.company;
+
+import java.io.*;
+import java.net.*;
+public class MyServer {
+    public static void main(String[] args) throws Exception {
+        try{
+            ServerSocket ss=new ServerSocket(6666);
+            Socket s=ss.accept();//establishes connection
+            DataInputStream dis=new DataInputStream(s.getInputStream());
+            String  str=(String)dis.readUTF();
+            System.out.println("message: "+str);
+            System.out.println("Connection Closed");
+            ss.close();
+        }catch(Exception e){System.out.println(e);}
+    }
+}
